@@ -55,7 +55,7 @@ container_ip() {
 
 container_port() {
   if (echo "$OSTYPE" | egrep -qs 'darwin'); then
-    docker inspect --format='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' $(cat $cid_file)
+    docker inspect --format="{{(index .NetworkSettings.Ports \"$test_port/tcp\" 0).HostPort}}" $(cat $cid_file)
   else
     echo $test_port
   fi
