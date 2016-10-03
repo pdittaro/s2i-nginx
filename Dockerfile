@@ -31,5 +31,3 @@ RUN cp /opt/app-root/etc/nginx.server.sample.conf /opt/app-root/etc/nginx.conf.d
 USER 1001
 
 EXPOSE 8080
-
-CMD ["usage"]
