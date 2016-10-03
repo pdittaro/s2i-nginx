@@ -1,12 +1,12 @@
 FROM openshift/base-centos7
 
-MAINTAINER Tobias Florek <tob@butter.sh>
+MAINTAINER Greg Turner <greg.fun@gmail.com>
 
 ENV NGINX_VERSION 1.8
 ENV NGINX_BASE_DIR /opt/rh/rh-nginx18/root
 ENV NGINX_VAR_DIR /var/opt/rh/rh-nginx18
 
-LABEL io.k8s.description="Platform for serving nginx-based applications (static files)" \
+LABEL io.k8s.description="Nginx static file server and reverse proxy" \
       io.k8s.display-name="nginx builder ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,nginx,webserver"
