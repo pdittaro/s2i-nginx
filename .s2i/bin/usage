@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 cat <<EOF
 This is the s2i-nginx S2I image:
 To use it, install S2I: https://github.com/openshift/source-to-image
