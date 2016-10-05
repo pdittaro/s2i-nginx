@@ -26,4 +26,9 @@ envsubst_config() {
 
 envsubst_config
 
-exec ${NGINX_BASE_DIR}/usr/sbin/nginx -c "$NGINX_CONF"
+exec ${NGINX_BASE_DIR}/usr/sbin/nginx -c "$NGINX_CONF" &
+
+# Once nginx is up and running we can get our certificate
+echo "---> starting certbot to obtain certificate"
+
+letsencrypt --logs-dir ${LETSENCRYPT_LOGS} --config-dir ${LETSENCRYPT_CONFIG} certonly --email greg.fun@gmail.com --webroot -w ${NGINX_STATIC_DIR-html} -d rproxy2-mygovbc-cmf-foodsafe-dev.pathfinder.gov.bc.ca
