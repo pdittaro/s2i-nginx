@@ -2,25 +2,25 @@ FROM openshift/base-centos7
 
 MAINTAINER Greg Turner <greg.fun@gmail.com>
 
-ENV NGINX_VERSION 1.8
-ENV NGINX_BASE_DIR /opt/rh/rh-nginx18/root
-ENV NGINX_VAR_DIR /var/opt/rh/rh-nginx18
+ENV NGINX_BASE_DIR /usr/sbin
+ENV NGINX_VAR_DIR /var
 
 LABEL io.k8s.description="Nginx static file server and reverse proxy" \
-      io.k8s.display-name="nginx builder ${NGINX_VERSION}" \
+      io.k8s.display-name="nginx builder" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,nginx,webserver"
 
+COPY ./etc/yum.repos.d/nginx.repo /opt/app-root/etc/yum.repos.d/ngnix.repo
 
 RUN yum install --setopt=tsflags=nodocs -y centos-release-scl-rh \
- && yum install --setopt=tsflags=nodocs -y bcrypt rh-nginx${NGINX_VERSION/\./} \
+ && yum install --setopt=tsflags=nodocs -y bcrypt nginx \
  && yum clean all -y \
- && mkdir -p /opt/app-root/etc/nginx.conf.d /opt/app-root/run \
+ && mkdir -p /opt/app-root/etc/nginx.conf.d /opt/app-root/run $NGINX_VAR_DIR/cache/nginx \
  && chmod -R a+rx  $NGINX_VAR_DIR/lib/nginx \
  && chmod -R a+rwX $NGINX_VAR_DIR/lib/nginx/tmp \
-                   $NGINX_VAR_DIR/log \
+                   $NGINX_VAR_DIR/log/nginx \
                    $NGINX_VAR_DIR/run \
-				   $NGINX_VAR_DIR/cache \
+				   $NGINX_VAR_DIR/cache/nginx \
                    /opt/app-root/run
 
 COPY ./etc/ /opt/app-root/etc

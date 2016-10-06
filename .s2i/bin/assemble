@@ -88,7 +88,7 @@ test_config() {
     envsubst_config
 
     echo "---> testing config"
-    if ! $NGINX_BASE_DIR/usr/sbin/nginx -c /opt/app-root/etc/nginx.conf -t ; then
+    if ! $NGINX_BASE_DIR/nginx -c /opt/app-root/etc/nginx.conf -t ; then
         echo "nginx configuration not valid."
         echo
         for f in /opt/app-root/etc/nginx.conf.d/*; do
