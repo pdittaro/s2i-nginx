@@ -20,6 +20,7 @@ RUN yum install --setopt=tsflags=nodocs -y centos-release-scl-rh \
  && chmod -R a+rwX $NGINX_VAR_DIR/lib/nginx/tmp \
                    $NGINX_VAR_DIR/log \
                    $NGINX_VAR_DIR/run \
+				   $NGINX_VAR_DIR/cache
                    /opt/app-root/run
 
 COPY ./etc/ /opt/app-root/etc
