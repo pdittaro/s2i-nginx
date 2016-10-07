@@ -77,9 +77,33 @@ The builder image should've built and been pushed to OpenShift.  You should have
 
 TODO: Avoid environment specific configuration in your custom configuration repo, should be generic nginx config for ALL environments.
 
-## Integrating with SiteMinder Web SSO
+## Integrating with BC Government SiteMinder Web SSO
 
-TODO
+Integrating SiteMinder Web SSO, BC's current SSO standard, is fairly simple with this nginx as a proxy.  You'll need to on-board with IDIM to make this happen.  And some consulting charges apply.  
+
+Tripling proxing and double load balancing adds some unnecessary latency and additional points of failure.  Not the ideal situation, but is the most feasible option at this time for the OpenShift environment, see Future and Alternate Considerations.  
+
+### Network Flow  
+
+This network flow describes how HTTP traffic is handle between the browser and eventually
+your application on OpenShift.
+
+1. Web Browser initiates HTTPS (certificate purchase required) request to a FQDN 
+2. The FQDN resolves to WAM's SiteMinder reverse proxy shared service.  Note: it does path thru an load balancer but its  transparent at this HTTP level)
+	1. WAM sets up this during your IDIM onboarding process
+3. WAM's reverse proxy establishes a new TLS connection to a https://*.pathfinder.gov.bc.ca OpenShift router endpoint.  Note: it does path thru a load balancer but its  transparent at this HTTP level) and includes an HTTP authorization header `Authorization : Bearer donotuse-somelongrandomkeyunqiueperproxypolicy`
+	1. You setup this new route to your new Nginx in your OpenShift project
+	2. This is an TLS edge terminated route
+4. OpenShift router establishes a new HTTP connection to the OpenShift Ngnix service.
+5. Ngnix restricts access to only HTTP requests with the authorization HTTP header present, `Authorization : Bearer donotuse-somelongrandomkeyunqiueperproxypolicy`
+6. If allowed, Nginx proxies HTTP request to downstream HTTP server, e.g., WildFly, NodeJS, etc.
+
+### Future and Alternate Considerations
+
+This integration with SiteMinder Web SSO only describes only integration path with IDIM's identity and authentication services.  There also exists SAML 2.0 web flow and hopefully in the future a OAuth2 or OpenIDConnect protocol support.  
+
+Alternative options considered were: a private OpenShift Router, a OpenShift router with the ability firewall. 
+  
 
 ## Advanced Usage
 
