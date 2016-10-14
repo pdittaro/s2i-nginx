@@ -60,6 +60,7 @@ copy_server_configs() {
     if [ -n "${NGINX_CONF_DIR}" -a -d /tmp/src/"${NGINX_CONF_DIR}" ]; then
         echo -e "---> Copying files from config dir ${NGINX_CONF_DIR}"
         cp -Rf /tmp/src/"${NGINX_CONF_DIR}"/. /opt/app-root/etc/nginx.conf.d
+    fi
     if [ -n "${NGINX_CONF_DIR}" -a -d /tmp/src/"${NGINX_CONF_DIR}" ]; then
         echo -e "---> Copying files from config dir ${NGINX_CONF_DIR}"
         cp -Rf /tmp/src/"${NGINX_CONF_DIR}"/. /opt/app-root/etc/nginx.conf.d
