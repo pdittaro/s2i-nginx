@@ -19,6 +19,7 @@ NGINX_CONF_DIR=${NGINX_CONF_DIR-conf.d}
 NGINX_AUX_DIR=${NGINX_AUX_DIR-aux}
 export NGINX_PROXY_URL=http://localhost
 
+
 envsubst_config() {
   export DOLAR='$'
   if ls /opt/app-root/etc/nginx.conf.d/*.tmpl > /dev/null 2>&1 ; then
