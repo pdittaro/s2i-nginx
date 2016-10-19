@@ -58,14 +58,12 @@ them to the resulting image, e.g. htpasswd files.  These will be copied to `/opt
 
 Optionally can supply a `/nginx.conf-snippet` that will be used by the as built container.
 
-### Steb 3a: Using the S2I-Nginx in OpenShift for Multiple Projects (Recommended)
+### Steb 3a: Building the S2I-Nginx in OpenShift for Multiple Projects (Recommended)
 Note: This is for apps where the build project is seperated from the deployment environments.
 
-`$ cd `
-`$ oc process -f openshift/templates/rproxy-build-template.json -v BUILDER_IMAGESTREAM_TAG=s2i-nginx:latest -v SOURCE_REPOSITORY_URL=https://
-github.com/bcgov/mygovbc-nginx.git -v NGINX_PROXY_URL=http://mygovbc-app:8080/ -v NAME=rproxy | oc create -f -`
+`$ oc process -f https://raw.githubusercontent.com/BCDevOps/s2i-nginx/master/openshift/templates/rproxy-build-template.json -v BUILDER_IMAGESTREAM_TAG=s2i-nginx:latest -v SOURCE_REPOSITORY_URL=<url to repo created in step 2> -v NGINX_PROXY_URL=<url to proxy to consistent across all envs> -v NAME=rproxy | oc create -f -`
 
-### Step 3b: Using the S2I-Nginx in OpenShift for Single Project
+### Step 3b: Building the S2I-Nginx in OpenShift for Single Project
 Note: This is for apps where the build and deployments are all-in-one.
 
 The builder image should've built and been pushed to OpenShift.  You should have your own custom nginx conf and/or static files.  Now you can spin it up in your OpenShift Project.
