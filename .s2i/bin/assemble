@@ -17,8 +17,6 @@ NGINX_STATIC_DIR=${NGINX_STATIC_DIR-html}
 NGINX_CONF_FILE=${NGINX_CONF_FILE-nginx.conf}
 NGINX_CONF_DIR=${NGINX_CONF_DIR-conf.d}
 NGINX_AUX_DIR=${NGINX_AUX_DIR-aux}
-export NGINX_PROXY_URL=http://localhost
-
 
 envsubst_config() {
   export DOLAR='$'
@@ -80,16 +78,20 @@ copy_aux_dir() {
 test_config() {
     envsubst_config
 
-    echo "---> testing config"
-    if ! $NGINX_BASE_DIR/nginx -c /opt/app-root/etc/nginx.conf -t ; then
-        echo "nginx configuration not valid."
-        echo
-        for f in /opt/app-root/etc/nginx.conf.d/*; do
-            echo "==> $f <=="
-            cat $f
-        done
-        exit 1
-    fi
+    # disabling the testing of the config at assemble time because the
+    # the network resources are not available in a seperate OpenShift project
+    # for building
+    #
+    #echo "---> testing config"
+    #if ! $NGINX_BASE_DIR/nginx -c /opt/app-root/etc/nginx.conf -t ; then
+    #    echo "nginx configuration not valid."
+    #    echo
+    #    for f in /opt/app-root/etc/nginx.conf.d/*; do
+    #        echo "==> $f <=="
+    #        cat $f
+    #    done
+    #    exit 1
+    #fi
 }
 
 cleanup() {

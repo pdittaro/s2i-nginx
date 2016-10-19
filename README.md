@@ -30,7 +30,9 @@ build the S2I image:
 Tag and push this image to the OpenShift Docker Registry for your OpenShift Project:
 
 `$ docker tag s2i-nginx docker-registry.pathfinder.gov.bc.ca/<yourprojectname>/s2i-nginx`
+
 `$ docker login docker-registry.pathfinder.gov.bc.ca -u <username> -p <token>`
+
 `$ docker push docker-registry.pathfinder.gov.bc.ca/<yourprojectname>/s2i-nginx`
 
 [Forgot how to get a token?](https://console.pathfinder.gov.bc.ca:8443/console/command-line)
@@ -56,7 +58,16 @@ them to the resulting image, e.g. htpasswd files.  These will be copied to `/opt
 
 Optionally can supply a `/nginx.conf-snippet` that will be used by the as built container.
 
-### Step 3: Using the S2I-Nginx in OpenShift
+### Steb 3a: Using the S2I-Nginx in OpenShift for Multiple Projects (Recommended)
+Note: This is for apps where the build project is seperated from the deployment environments.
+
+`$ cd `
+`$ oc process -f openshift/templates/rproxy-build-template.json -v BUILDER_IMAGESTREAM_TAG=s2i-nginx:latest -v SOURCE_REPOSITORY_URL=https://
+github.com/bcgov/mygovbc-nginx.git -v NGINX_PROXY_URL=http://mygovbc-app:8080/ -v NAME=rproxy | oc create -f -`
+
+### Step 3b: Using the S2I-Nginx in OpenShift for Single Project
+Note: This is for apps where the build and deployments are all-in-one.
+
 The builder image should've built and been pushed to OpenShift.  You should have your own custom nginx conf and/or static files.  Now you can spin it up in your OpenShift Project.
 
 1. [Login to OpenShift](https://console.pathfinder.gov.bc.ca:8443/console/)
