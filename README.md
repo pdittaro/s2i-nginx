@@ -63,6 +63,11 @@ Note: This is for apps where the build project is seperated from the deployment 
 
 `$ oc process -f https://raw.githubusercontent.com/BCDevOps/s2i-nginx/master/openshift/templates/rproxy-build-template.json -v BUILDER_IMAGESTREAM_TAG=s2i-nginx:latest -v SOURCE_REPOSITORY_URL=<url to repo created in step 2> -v NGINX_PROXY_URL=<url to proxy to consistent across all envs> -v NAME=rproxy | oc create -f -`
 
+Once build you can use another template to deploy the application to one of your project environments.  
+A sample is provided in this example but feel free to customize your own. 
+
+`$ oc process -f https://raw.githubusercontent.com/bcgov/mygovbc-nginx/master/openshift/templates/rproxy-environment-template.json -v APPLICATION_DOMAIN=<URL of the route you want to the rproxy> -v APP_DEPLOYMENT_TAG=dev | oc create -f - `
+
 ### Step 3b: Building the S2I-Nginx in OpenShift for Single Project
 Note: This is for apps where the build and deployments are all-in-one.
 
@@ -80,11 +85,10 @@ The builder image should've built and been pushed to OpenShift.  You should have
 ## Best Practices
 
 1. Generally you want a minimum of 2 pods for high availability purposes, e.g., rolling deployments.
-2. Branch, e.g, `master and development` your configuration repo to avoid deploying untested config to production.  
+2. For Single Project scenarios, branch, e.g, `master and development` your configuration repo to avoid deploying untested config to production.  
 3. If reverse proxying to a OpenShift Service, remove the `route' from the service to avoid proxy by-pass.  This is especially important if the reverse proxy is providing a layer of security.
 4. Harden your nginx configuration.   
-
-TODO: Avoid environment specific configuration in your custom configuration repo, should be generic nginx config for ALL environments.
+5. Avoid environment specific configuration in your custom configuration repo, should be generic nginx config for ALL environments.
 
 ## Integrating with BC Government SiteMinder Web SSO
 
