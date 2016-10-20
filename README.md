@@ -104,12 +104,14 @@ your application on OpenShift.
 1. Web Browser initiates HTTPS (certificate purchase required) request to a FQDN 
 2. The FQDN resolves to WAM's SiteMinder reverse proxy shared service.  Note: it does path thru an load balancer but its  transparent at this HTTP level)
 	1. WAM sets up this during your IDIM onboarding process
-3. WAM's reverse proxy establishes a new TLS connection to a https://*.pathfinder.gov.bc.ca OpenShift router endpoint.  Note: it does path thru a load balancer but its  transparent at this HTTP level) and includes an HTTP authorization header `Authorization : Bearer donotuse-somelongrandomkeyunqiueperproxypolicy`
+3. WAM's reverse proxy establishes a new TLS connection to a https://*.pathfinder.gov.bc.ca OpenShift router endpoint.  Note: it does path thru a load balancer but its  transparent at this HTTP level)
 	1. You setup this new route to your new Nginx in your OpenShift project
 	2. This is an TLS edge terminated route
-4. OpenShift router establishes a new HTTP connection to the OpenShift Ngnix service.
-5. Ngnix restricts access to only HTTP requests with the authorization HTTP header present, `Authorization : Bearer donotuse-somelongrandomkeyunqiueperproxypolicy`
+4. OpenShift router establishes a new HTTP connection to the OpenShift Ngnix service. OpenShift router ALWAYS appends the client IP in the the X-Forwarded-For HTTP Header.
+5. Ngnix restricts access to only to the last X-Forwarded-For IP address that matches SiteMinder outbound IP address.
 6. If allowed, Nginx proxies HTTP request to downstream HTTP server, e.g., WildFly, NodeJS, etc.
+
+In a nutshell, since the inbound client IP address to OpenShift Router is always appended to the X-Forwarded-For AND Nginx trusts OpenShift Router, the IP address may be used for access control decisions. 
 
 ### Future and Alternate Considerations
 
