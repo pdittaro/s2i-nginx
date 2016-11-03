@@ -61,12 +61,12 @@ Optionally can supply a `/nginx.conf-snippet` that will be used by the as built 
 ### Steb 3a: Building the S2I-Nginx in OpenShift for Multiple Projects (Recommended)
 Note: This is for apps where the build project is seperated from the deployment environments.
 
-`$ oc process -f https://raw.githubusercontent.com/BCDevOps/s2i-nginx/master/openshift/templates/rproxy-build-template.json -v BUILDER_IMAGESTREAM_TAG=s2i-nginx:latest -v SOURCE_REPOSITORY_URL=<url to repo created in step 2> -v NGINX_PROXY_URL=<url to proxy to consistent across all envs> -v NAME=rproxy | oc create -f -`
+`$ oc process -f https://raw.githubusercontent.com/BCDevOps/s2i-nginx/master/openshift/templates/nginx-build-template.json -v BUILDER_IMAGESTREAM_TAG=s2i-nginx:latest -v SOURCE_REPOSITORY_URL=<url to repo created in step 2> -v NGINX_PROXY_URL=<url to proxy to consistent across all envs> -v NAME=rproxy | oc create -f -`
 
 Once build you can use another template to deploy the application to one of your project environments.  
 A sample is provided in this example but feel free to customize your own. 
 
-`$ oc process -f https://raw.githubusercontent.com/bcgov/mygovbc-nginx/master/openshift/templates/rproxy-environment-template.json -v APPLICATION_DOMAIN=<URL of the route you want to the rproxy> -v APP_DEPLOYMENT_TAG=dev | oc create -f - `
+`$ oc process -f https://raw.githubusercontent.com/bcgov/mygovbc-nginx/master/openshift/templates/nginx-environment-template.json -v APPLICATION_DOMAIN=<URL of the route you want to the rproxy> -v APP_DEPLOYMENT_TAG=dev | oc create -f - `
 
 ### Step 3b: Building the S2I-Nginx in OpenShift for Single Project
 Note: This is for apps where the build and deployments are all-in-one.
