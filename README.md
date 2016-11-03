@@ -135,6 +135,9 @@ Steps:
 2. Clone it
 3. `make` it
 
+If docker build fails and you need to run locally, try logging into the docker container:
+
+`$ docker run -a stdin -a stdout -i -t -u root s2i-nginx /bin/bash`
 
 ### Build behavior
 There are some environment variables you can set to influence **build** behavior.
