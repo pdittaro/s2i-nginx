@@ -10,18 +10,20 @@ LABEL io.k8s.description="Nginx static file server and reverse proxy" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,nginx,webserver"
 
-COPY ./etc/yum.repos.d/nginx.repo /opt/app-root/etc/yum.repos.d/ngnix.repo
+COPY ./etc/yum.repos.d/nginx.repo /etc/yum.repos.d/ngnix.repo
+
+RUN yum update --setopt=tsflags=nodocs -y
 
 RUN yum install --setopt=tsflags=nodocs -y centos-release-scl-rh \
  && yum install --setopt=tsflags=nodocs -y bcrypt nginx \
  && yum clean all -y \
  && mkdir -p /opt/app-root/etc/nginx.conf.d /opt/app-root/run $NGINX_VAR_DIR/cache/nginx \
- && chmod -R a+rx  $NGINX_VAR_DIR/lib/nginx \
- && chmod -R a+rwX $NGINX_VAR_DIR/lib/nginx/tmp \
-                   $NGINX_VAR_DIR/log/nginx \
+ && chmod -R a+rx  /usr/lib64/nginx \
+ && chmod -R a+rwX $NGINX_VAR_DIR/log/nginx \
                    $NGINX_VAR_DIR/run \
-				   $NGINX_VAR_DIR/cache/nginx \
+                   $NGINX_VAR_DIR/cache/nginx \
                    /opt/app-root/run
+
 
 COPY ./etc/ /opt/app-root/etc
 COPY ./.s2i/bin/ ${STI_SCRIPTS_PATH}

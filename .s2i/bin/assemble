@@ -46,8 +46,6 @@ copy_static_files() {
     echo "---> Copying static files"
     if [ -d /tmp/src/"${NGINX_STATIC_DIR}" ]; then
         cp -Rf /tmp/src/"${NGINX_STATIC_DIR}"/. ./html
-    else
-        cp -Rf /tmp/src/. ./html
     fi
 }
 
