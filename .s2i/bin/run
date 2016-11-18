@@ -15,11 +15,7 @@ envsubst_config() {
     echo "---> substituting environment variables in templates"
     for file in /opt/app-root/etc/nginx.conf.d/*.tmpl; do
       target_file="/opt/app-root/etc/nginx.conf.d/$(basename "$file" .tmpl)"
-      if [ -f "$target_file" ]; then
-        echo "Not substituting file $file because $target_file already exists!"
-      else
-        envsubst < "$file" > "$target_file"
-      fi
+      envsubst < "$file" > "$target_file"
     done
   fi
 }

@@ -18,21 +18,6 @@ NGINX_CONF_FILE=${NGINX_CONF_FILE-nginx.conf}
 NGINX_CONF_DIR=${NGINX_CONF_DIR-conf.d}
 NGINX_AUX_DIR=${NGINX_AUX_DIR-aux}
 
-envsubst_config() {
-  export DOLAR='$'
-  if ls /opt/app-root/etc/nginx.conf.d/*.tmpl > /dev/null 2>&1 ; then
-    echo "---> substituting environment variables in templates"
-    for file in /opt/app-root/etc/nginx.conf.d/*.tmpl; do
-      target_file="/opt/app-root/etc/nginx.conf.d/$(basename "$file" .tmpl)"
-      if [ -f "$target_file" ]; then
-        echo "Not substituting file $file because $target_file already exists!"
-      else
-        envsubst < "$file" > "$target_file"
-      fi
-    done
-  fi
-}
-
 # Restore artifacts from the previous build (if they exist).
 #
 restore_build_artifacts() {
@@ -71,25 +56,6 @@ copy_aux_dir() {
         mkdir /opt/app-root/etc/aux
         cp -Rf /tmp/src/"${NGINX_AUX_DIR}"/. /opt/app-root/etc/aux
     fi
-}
-
-test_config() {
-    envsubst_config
-
-    # disabling the testing of the config at assemble time because the
-    # the network resources are not available in a seperate OpenShift project
-    # for building
-    #
-    #echo "---> testing config"
-    #if ! $NGINX_BASE_DIR/nginx -c /opt/app-root/etc/nginx.conf -t ; then
-    #    echo "nginx configuration not valid."
-    #    echo
-    #    for f in /opt/app-root/etc/nginx.conf.d/*; do
-    #        echo "==> $f <=="
-    #        cat $f
-    #    done
-    #    exit 1
-    #fi
 }
 
 cleanup() {
