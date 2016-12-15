@@ -72,8 +72,13 @@
                     "protocol": "TCP"
                   }
                 ],
-                
-                "imagePullPolicy": "Always"
+                "imagePullPolicy": "Always",
+                "env": [
+                  {
+                    "name": "NGINX_PROXY_HOST",
+                    "value": "${NGINX_PROXY_HOST}"
+                  }
+                ]
               }
             ],
             "restartPolicy": "Always",

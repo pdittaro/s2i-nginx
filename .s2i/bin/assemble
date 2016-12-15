@@ -69,5 +69,4 @@ copy_static_files
 copy_server_configs
 copy_aux_dir
 
-test_config
 cleanup
