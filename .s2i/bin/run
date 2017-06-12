@@ -20,6 +20,14 @@ envsubst_config() {
   fi
 }
 
+generate_password_file() {
+  if [ -n "$USERNAME" ] && [ -n "$PASSWORD" ]; then
+    echo "---> Generating .htpasswd file"
+    `echo "$USERNAME:$(openssl passwd -crypt $PASSWORD)" > /tmp/.htpasswd`
+  fi
+}
+
 envsubst_config
+generate_password_file
 
 exec ${NGINX_BASE_DIR}/nginx -c "$NGINX_CONF"
