@@ -2,7 +2,7 @@
     "kind": "Template",
     "apiVersion": "v1",
     "metadata": {
-        "name": "nginx",
+        "name": "nginx-reverse-proxy-build",
         "creationTimestamp": null
     },
     "objects": [
@@ -51,12 +51,14 @@
                     "git": {
                         "ref": "${SOURCE_REPOSITORY_REF}",
                         "uri": "${SOURCE_REPOSITORY_URL}"
-                    }
+                    },
+                    "contextDir": "${CONTEXT_DIR}"
                 },
                 "strategy": {
                     "type": "Source",
                     "sourceStrategy": {
                         "from": {
+                            "namespace": "${BUILDER_IMAGESTREAM_NAMESPACE}",
                             "kind": "ImageStreamTag",
                             "name": "${BUILDER_IMAGESTREAM_TAG}"
                         },
@@ -87,12 +89,21 @@
       "displayName": "Name",
       "description": "The name assigned to all of the frontend objects defined in this template.",
       "required": true,
-      "value": "nginx"
+      "value": "nginx-reverse-proxy"
     },
     {
       "name": "BUILDER_IMAGESTREAM_TAG",
       "displayName": "Builder ImageStreamTag",
-      "description": "The image stream tag (e.g. rproxy:latest) of the S2I image that should be used to build the application."
+      "description": "The image stream tag (e.g. rproxy:latest) of the S2I image that should be used to build the application.",
+      "required": true,
+      "value": "s2i-nginx:latest"
+    },
+    {
+      "name": "BUILDER_IMAGESTREAM_NAMESPACE",
+      "displayName": "Builder ImageStream Namespace",
+      "description": "The namespace containing the image stream tag (e.g. rproxy:latest) of the S2I image that should be used to build the application.",
+      "required": true,
+      "value": "openshift"
     },
     {
       "name": "SOURCE_REPOSITORY_URL",
@@ -104,6 +115,12 @@
       "name": "SOURCE_REPOSITORY_REF",
       "displayName": "Git Reference",
       "description": "Set this to a branch name, tag or other ref of your repository if you are not using the default branch."
+    },
+    {
+      "name": "CONTEXT_DIR",
+      "displayName": "Configuration files path (Context Dir)",
+      "description": "Set this to the path where NGINX files are located within the GitHub repo.",
+      "required": false
     },
     {
       "name": "GITHUB_WEBHOOK_SECRET",
