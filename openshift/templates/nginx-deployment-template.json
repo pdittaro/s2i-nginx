@@ -2,7 +2,10 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
-    "name": "nginx-reverse-proxy-deployment"
+    "name": "nginx-reverse-proxy-deployment",
+    "annotations": {
+      "tags": "bcgov,nginx"
+    }
   },
   "objects": [
     {

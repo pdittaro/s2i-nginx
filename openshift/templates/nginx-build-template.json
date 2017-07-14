@@ -1,88 +1,91 @@
 {
-    "kind": "Template",
-    "apiVersion": "v1",
-    "metadata": {
-        "name": "nginx-reverse-proxy-build",
-        "creationTimestamp": null
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "nginx-reverse-proxy-build",
+    "annotations": {
+      "tags": "bcgov,nginx"
+    }
+  },
+  "objects": [
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}"
+      }
     },
-    "objects": [
-      {
-        "kind": "ImageStream",
-        "apiVersion": "v1",
-        "metadata": {
-          "name": "${NAME}"
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "${NAME}"
         }
       },
-      {
-            "kind": "BuildConfig",
-            "apiVersion": "v1",
-            "metadata": {
-                "name": "${NAME}",
-                "creationTimestamp": null,
-                "labels": {
-                    "app": "${NAME}"
-                }
-            },
-            "spec": {
-                "triggers": [
-                    {
-                        "type": "GitHub",
-                        "github": {
-                            "secret": "${GITHUB_WEBHOOK_SECRET}"
-                        }
-                    },
-                    {
-                        "type": "Generic",
-                        "generic": {
-                            "secret": "${GENERIC_WEBHOOK_SECRET}"
-                        }
-                    },
-                    {
-                        "type": "ConfigChange"
-                    },
-                    {
-                        "type": "ImageChange",
-                        "imageChange": {}
-                    }
-                ],
-                "runPolicy": "Serial",
-                "source": {
-                    "type": "Git",
-                    "git": {
-                        "ref": "${SOURCE_REPOSITORY_REF}",
-                        "uri": "${SOURCE_REPOSITORY_URL}"
-                    },
-                    "contextDir": "${CONTEXT_DIR}"
-                },
-                "strategy": {
-                    "type": "Source",
-                    "sourceStrategy": {
-                        "from": {
-                            "namespace": "${BUILDER_IMAGESTREAM_NAMESPACE}",
-                            "kind": "ImageStreamTag",
-                            "name": "${BUILDER_IMAGESTREAM_TAG}"
-                        },
-                        "env": [
-                        {
-                          "name": "NGINX_PROXY_URL",
-                          "value": "${NGINX_PROXY_URL}"
-                        }]
-                    }
-                },
-                "output": {
-                    "to": {
-                        "kind": "ImageStreamTag",
-                        "name": "${NAME}:latest"
-                    }
-                },
-                "resources": {},
-                "postCommit": {}
-            },
-            "status": {
-                "lastVersion": 0
+      "spec": {
+        "triggers": [
+          {
+            "type": "GitHub",
+            "github": {
+              "secret": "${GITHUB_WEBHOOK_SECRET}"
             }
-        }
-    ],
+          },
+          {
+            "type": "Generic",
+            "generic": {
+              "secret": "${GENERIC_WEBHOOK_SECRET}"
+            }
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChange": {}
+          }
+        ],
+        "runPolicy": "Serial",
+        "source": {
+          "type": "Git",
+          "git": {
+            "ref": "${SOURCE_REPOSITORY_REF}",
+            "uri": "${SOURCE_REPOSITORY_URL}"
+          },
+          "contextDir": "${CONTEXT_DIR}"
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "namespace": "${BUILDER_IMAGESTREAM_NAMESPACE}",
+              "kind": "ImageStreamTag",
+              "name": "${BUILDER_IMAGESTREAM_TAG}"
+            },
+            "env": [
+              {
+                "name": "NGINX_PROXY_URL",
+                "value": "${NGINX_PROXY_URL}"
+              }
+            ]
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${NAME}:latest"
+          }
+        },
+        "resources": {},
+        "postCommit": {}
+      },
+      "status": {
+        "lastVersion": 0
+      }
+    }
+  ],
   "parameters": [
     {
       "name": "NAME",
