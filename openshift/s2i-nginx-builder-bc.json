@@ -10,7 +10,7 @@
                 "name": "base-centos7",
                 "creationTimestamp": null,
                 "labels": {
-                    "build": "s2i-nginx"
+                    "build": "bcgov-s2i-nginx"
                 },
                 "annotations": {
                     "openshift.io/generated-by": "OpenShiftNewBuild"
@@ -40,10 +40,10 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "s2i-nginx",
+                "name": "bcgov-s2i-nginx",
                 "creationTimestamp": null,
                 "labels": {
-                    "build": "s2i-nginx"
+                    "build": "bcgov-s2i-nginx"
                 },
                 "annotations": {
                     "openshift.io/generated-by": "OpenShiftNewBuild"
@@ -58,10 +58,10 @@
             "kind": "BuildConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "s2i-nginx",
+                "name": "bcgov-s2i-nginx",
                 "creationTimestamp": null,
                 "labels": {
-                    "build": "s2i-nginx"
+                    "build": "bcgov-s2i-nginx"
                 },
                 "annotations": {
                     "openshift.io/generated-by": "OpenShiftNewBuild"
@@ -95,7 +95,7 @@
                 "output": {
                     "to": {
                         "kind": "ImageStreamTag",
-                        "name": "s2i-nginx:latest"
+                        "name": "bcgov-s2i-nginx:latest"
                     }
                 },
                 "resources": {},
