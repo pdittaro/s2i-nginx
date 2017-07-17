@@ -2,8 +2,10 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
-    "name": "true",
-    "creationTimestamp": null
+    "name": "nginx-reverse-proxy-deployment",
+    "annotations": {
+      "tags": "bcgov,nginx"
+    }
   },
   "objects": [
     {
@@ -157,7 +159,7 @@
     {
       "name": "APPLICATION_DOMAIN",
       "displayName": "Application Hostname",
-      "description": "The exposed hostname that will route to the MyGovBC service, if left blank a value will be defaulted.",
+      "description": "The exposed hostname for the application/service.",
       "required": true
     },
     {
