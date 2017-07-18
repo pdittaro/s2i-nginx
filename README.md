@@ -1,8 +1,8 @@
 # Custom source-to-image builder for static nginx containers
 
 ## Overview
-This repo is source code to `docker build` an S2I build image for an Nginx server 
-on CentOS7.  
+This repo is source code to build and deploy an Nginx server 
+on OpenShift 3.3+.  
 
 Most people will just need the Basic Usage if you just want NGinx to serve 
 HTML/CSS/JS/whatever from it and/or use it as a reverse or forward proxy.
@@ -13,10 +13,48 @@ serve static files.
 
 ## Basic Usage
 
+### Step 1: Customizing your Nginx Config and Static Files
+
+Create a separate Git repo or [fork/clone our example](https://github.com/BCDevOps/s2i-nginx-example) repo.
+
+The directory structure should look like this:
+
+`/html/    <- your static files here or just empty`
+
+`/conf.d/  <- your custom NGinx config files`
+
+`/aux/     <- your custom auxiliary files`
+
+### Step 2: Building the S2I Image
+
+In basic usage, we let OpenShift build the docker image using a template (now in the global registry!)
+
+1. Login to OpenShift web console
+1. If following conventions, go to your "tools" project
+1. Add to Project
+1. Search for `nginx`
+1. You should find two templates, we want the `nginx-reverse-proxy-build`
+1. You'll need to specify the Git Repository URL, which is the repo you made in Step 1
+1. If using reverse proxy, you'll need to specify the NGinx Proxy URL
+1. Create it and let it build the image
+ 
+### Step 3: Deploying the Nginx Image
+
+Once you've got an image built, you can deploy it to any environment you like.  We've provided you with a template as well!
+
+1. Login to OpenShift web console
+1. If following conventions, go to your "tools" project
+1. Add to Project
+1. Search for `nginx`
+1. You should find two templates, we want the `nginx-reverse-proxy-deployment`
+1. Configure as required and create it!
+
+
+## Advanced Usage
+
 ### Step 1: Building the S2I Image
 
-Long term, we should have this s2i image available in the global registry 
-but until then, you'll have to build this custom s2i image.  Here's how:
+Building the image yourself, here's how:
 
 Required tools install:
 
@@ -120,7 +158,7 @@ This integration with SiteMinder Web SSO only describes only integration path wi
 Alternative options considered were: a private OpenShift Router, a OpenShift router with the ability firewall. 
   
 
-## Advanced Usage
+### Extra-Advanced Usage
 
 Don't like the static HTML folder?  Want to remove or add Nginx plugins?  A certbot would be handy? Just want to tinker? 
 
