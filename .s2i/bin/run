@@ -25,12 +25,13 @@ generate_password_files() {
   # It will start from USERNAME and PASSWORD, USERNAME1 and PASSWORD1, USERNAME2 and PASSWORD2, etc. 
   # It starts from variable USERNAME and USERNAME instead of USERNAME0 and PASSWORD0
   # to prevent existing builds from breaking.
+  rm -f -- /tmp/.htpasswd
   COUNTER=0
   USER=USERNAME
   PASS=PASSWORD
   while 
     echo "---> Generating .htpasswd file"
-    `echo "${!USER}:$(openssl passwd -crypt ${!PASS})" > /tmp/.htpasswd`
+    `echo "${!USER}:$(openssl passwd -crypt ${!PASS})" >> /tmp/.htpasswd`
     let "COUNTER+=1"
     USER=USERNAME$COUNTER
     PASS=PASSWORD$COUNTER
