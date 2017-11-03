@@ -25,18 +25,23 @@ generate_password_files() {
   # It will start from USERNAME and PASSWORD, USERNAME1 and PASSWORD1, USERNAME2 and PASSWORD2, etc. 
   # It starts from variable USERNAME and USERNAME instead of USERNAME0 and PASSWORD0
   # to prevent existing builds from breaking.
-  rm -f -- /tmp/.htpasswd
-  COUNTER=0
-  USER=USERNAME
-  PASS=PASSWORD
-  while 
+ 
+  rm -f -- /tmp/.htpasswd*
+  if [ -n "$USERNAME" ] && [ -n "$PASSWORD" ]; then
     echo "---> Generating .htpasswd file"
-    `echo "${!USER}:$(openssl passwd -crypt ${!PASS})" >> /tmp/.htpasswd`
+    `echo "$USERNAME:$(openssl passwd -crypt $PASSWORD)" > /tmp/.htpasswd`
+  fi
+  
+  COUNTER=1
+  USER=USERNAME$COUNTER
+  PASS=PASSWORD$COUNTER
+  while [ -n "${!USER}" ] && [ -n "${!PASS}" ];
+    echo "---> Generating .htpasswd file"
+    `echo "${!USER}:$(openssl passwd -crypt ${!PASS})" > /tmp/.htpasswd${COUNTER}`
     let "COUNTER+=1"
     USER=USERNAME$COUNTER
     PASS=PASSWORD$COUNTER
-    [ -n "${!USER}" ] && [ -n "${!PASS}" ]
-  do true; done
+  done
 }
 
 envsubst_config
