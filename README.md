@@ -220,3 +220,15 @@ location / {
         ${HTTP_BASIC}
     }
 ```
+
+For multiple usernames and passwords name the environment variables as follows:
+
+`USERNAME`, `PASSWORD`
+
+`USERNAME1`, `PASSWORD1`
+
+`USERNAME2`, `PASSWORD2`
+
+`USERNAME3`, `PASSWORD3`
+
+Etc...
