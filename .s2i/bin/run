@@ -35,7 +35,7 @@ generate_password_files() {
   COUNTER=1
   USER=USERNAME$COUNTER
   PASS=PASSWORD$COUNTER
-  while [ -n "${!USER}" ] && [ -n "${!PASS}" ];
+  while [ -n "${!USER}" ] && [ -n "${!PASS}" ]; do
     echo "---> Generating .htpasswd file"
     `echo "${!USER}:$(openssl passwd -crypt ${!PASS})" > /tmp/.htpasswd${COUNTER}`
     let "COUNTER+=1"
