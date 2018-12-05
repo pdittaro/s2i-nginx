@@ -90,7 +90,16 @@
                         "name": "${NAME}:${OUTPUT_IMAGE_TAG}"
                     }
                 },
-                "resources": {},
+                "resources": {
+                    "requests":{
+                        "cpu": "1",
+                        "memory": "2Gi"
+                    },
+                    "limits":{
+                        "cpu": "2",
+                        "memory": "3Gi"
+                    }
+                },
                 "postCommit": {}
             },
             "status": {
