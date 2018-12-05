@@ -100,7 +100,10 @@
                         "memory": "3Gi"
                     }
                 },
-                "postCommit": {}
+                "postCommit": {},
+                "completionDeadlineSeconds": 1200,
+                "failedBuildsHistoryLimit": 2,
+                "successfulBuildsHistoryLimit": 5
             },
             "status": {
                 "lastVersion": 0
