@@ -1,8 +1,11 @@
 {
-    "kind": "List",
+    "kind": "Template",
     "apiVersion": "v1",
-    "metadata": {},
-    "items": [
+    "metadata": {
+      "name": "s2i-nginx",
+      "creationTimestamp": null
+    },
+    "objects": [
         {
             "kind": "ImageStream",
             "apiVersion": "v1",
@@ -10,10 +13,7 @@
                 "name": "base-centos7",
                 "creationTimestamp": null,
                 "labels": {
-                    "build": "bcgov-s2i-nginx"
-                },
-                "annotations": {
-                    "openshift.io/generated-by": "OpenShiftNewBuild"
+                    "shared": "true"
                 }
             },
             "spec": {
@@ -40,13 +40,10 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "bcgov-s2i-nginx",
+                "name": "${NAME}",
                 "creationTimestamp": null,
                 "labels": {
-                    "build": "bcgov-s2i-nginx"
-                },
-                "annotations": {
-                    "openshift.io/generated-by": "OpenShiftNewBuild"
+                    "shared": "true"
                 }
             },
             "spec": {},
@@ -58,14 +55,8 @@
             "kind": "BuildConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "bcgov-s2i-nginx",
-                "creationTimestamp": null,
-                "labels": {
-                    "build": "bcgov-s2i-nginx"
-                },
-                "annotations": {
-                    "openshift.io/generated-by": "OpenShiftNewBuild"
-                }
+                "name": "${NAME}${SUFFIX}",
+                "creationTimestamp": null
             },
             "spec": {
                 "triggers": [
@@ -80,7 +71,8 @@
                 "source": {
                     "type": "Git",
                     "git": {
-                        "uri": "https://github.com/BCDevOps/s2i-nginx.git"
+                        "uri": "${GIT_REPO_URL}",
+                        "ref": "${GIT_REF}"
                     }
                 },
                 "strategy": {
@@ -95,15 +87,62 @@
                 "output": {
                     "to": {
                         "kind": "ImageStreamTag",
-                        "name": "bcgov-s2i-nginx:latest"
+                        "name": "${NAME}:${OUTPUT_IMAGE_TAG}"
                     }
                 },
-                "resources": {},
-                "postCommit": {}
+                "resources": {
+                    "requests":{
+                        "cpu": "1",
+                        "memory": "2Gi"
+                    },
+                    "limits":{
+                        "cpu": "2",
+                        "memory": "3Gi"
+                    }
+                },
+                "postCommit": {},
+                "completionDeadlineSeconds": 1200,
+                "failedBuildsHistoryLimit": 2,
+                "successfulBuildsHistoryLimit": 5
             },
             "status": {
                 "lastVersion": 0
             }
+        }
+    ],
+    "parameters": [
+        {
+            "name": "NAME",
+            "displayName": "Name",
+            "description": "The name assigned to all objects.",
+            "required": true,
+            "value": "s2i-caddy"
+        },
+        {
+            "name": "SUFFIX",
+            "description": "A suffix appended to the name of all generated objects.",
+            "value": "-dev"
+        },
+        {
+            "name": "GIT_REPO_URL",
+            "displayName": "Git Repo URL",
+            "description": "The URL to your GIT repo, don't use the this default unless your just experimenting.",
+            "required": true,
+            "value": "https://github.com/BCDevOps/s2i-nginx.git"
+        },
+        {
+            "name": "GIT_REF",
+            "displayName": "Git Reference",
+            "description": "The git reference or branch.",
+            "required": true,
+            "value": "master"
+        },
+        {
+            "name": "OUTPUT_IMAGE_TAG",
+            "displayName": "Output Image Tag",
+            "description": "The tag given to the built image.",
+            "required": true,
+            "value": "latest"
         }
     ]
 }
