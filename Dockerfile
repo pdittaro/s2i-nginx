@@ -15,7 +15,7 @@ COPY ./etc/yum.repos.d/nginx.repo /etc/yum.repos.d/ngnix.repo
 RUN yum update --setopt=tsflags=nodocs -y
 
 RUN yum install --setopt=tsflags=nodocs -y centos-release-scl-rh \
- && yum install --setopt=tsflags=nodocs -y bcrypt nginx \
+ && yum install --setopt=tsflags=nodocs -y bcrypt nginx-1.14.0-1.el7_4.ngx.x86_64  \
  && yum clean all -y \
  && mkdir -p /opt/app-root/etc/nginx.conf.d /opt/app-root/run $NGINX_VAR_DIR/cache/nginx \
  && chmod -R a+rx  /usr/lib64/nginx \
